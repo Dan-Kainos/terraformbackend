@@ -1,7 +1,11 @@
-# install az module
-Install-Module -Name Az* -Scope CurrentUser -Repository PSGallery -Force
+# install az modules account, storage, keyvault
+Install-Module -Name Az -Scope CurrentUser -Repository PSGallery -Force
+Install-Module -Name Az.Accounts -Scope CurrentUser -Repository PSGallery -Force
+Install-Module -Name Az.Storage -Scope CurrentUser -Repository PSGallery -Force
+Install-Module -Name Az.KeyVault -Scope CurrentUser -Repository PSGallery -Force
 
 # Parameters
+$credential = Get-Credential
 $resourceGroup = "ALZ-Terraform-rg"
 $location = "WestEurope"
 $accountName = "alzterraformsalrs0x"
@@ -10,6 +14,9 @@ $storageKind = StorageV2
 $ctx = $storageAccount.Context
 $containerName = "tfstate"
 $vaultName = "alzdevopskv"
+
+# az login
+Connect-AzAccount -Credential $credential 
 
 # create resource group
 New-AzResourceGroup -Name $resourceGroup -Location $location
