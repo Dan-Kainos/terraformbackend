@@ -1,22 +1,17 @@
 # install az modules account, storage, keyvault
-Install-Module -Name Az -Scope CurrentUser -Repository PSGallery -Force
 Install-Module -Name Az.Accounts -Scope CurrentUser -Repository PSGallery -Force
 Install-Module -Name Az.Storage -Scope CurrentUser -Repository PSGallery -Force
 Install-Module -Name Az.KeyVault -Scope CurrentUser -Repository PSGallery -Force
 
 # Parameters
-$credential = Get-Credential
 $resourceGroup = "ALZ-Terraform-rg"
 $location = "WestEurope"
 $accountName = "alzterraformsalrs0x"
-$storageSku = LRS
-$storageKind = StorageV2
+$storageSku = "Standard_LRS"
+$storageKind = "StorageV2"
 $ctx = $storageAccount.Context
 $containerName = "tfstate"
 $vaultName = "alzdevopskv"
-
-# az login
-Connect-AzAccount -Credential $credential 
 
 # create resource group
 New-AzResourceGroup -Name $resourceGroup -Location $location
@@ -35,8 +30,8 @@ New-AzStorageContainer -Name $containerName -Context $ctx -Permission blob
 New-AzKeyVault -VaultName $vaultName -ResourceGroupName $resourceGroup -Location $location
 
 # Environment variable for terraform backend
-$ACCOUNT_KEY=(Get-AzStorageAccountKey -ResourceGroupName $resourceGroup -Name $accountName)[0].value
-$env:ARM_ACCESS_KEY=$ACCOUNT_KEY
+#$ACCOUNT_KEY=(Get-AzStorageAccountKey -ResourceGroupName $resourceGroup -Name $accountName)[0].value
+#$env:ARM_ACCESS_KEY=$ACCOUNT_KEY
 
 ## remove resource group
 # Remove-AzResourceGroup -Name $resourceGroup
